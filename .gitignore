@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+glsandbox/.vs/GLSandbox/v16/.suo
+glsandbox/.vs/GLSandbox/v16/Browse.VC.db
+glsandbox/.vs/GLSandbox/v16/Browse.VC.opendb
+glsandbox/.vs/GLSandbox/v16/ipch/AutoPCH/a7ee6d07ffec2cf0/MAIN.ipch
