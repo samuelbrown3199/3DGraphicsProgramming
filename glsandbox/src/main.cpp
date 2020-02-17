@@ -6,6 +6,27 @@
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
 
+const GLchar* vertexShaderSrc =
+"attribute vec3 a_Position;" \
+"attribute vec4 a_Color;   " \
+"                          "
+"varying vec4 v_Color;     " \
+"							  " \
+"void main()                " \
+"{						  " \
+" gl_Position = vec4(a_Position, 1.0);" \
+" v_Color = a_Color;           "\
+"}                          ";
+
+const GLchar* fragmentShaderSrc =
+"varying vec4 v_Color;    "\
+"void main()              "\
+"{                        "\
+" gl_FragColor = v_Color;"\
+"}";
+
+
+
 int main(int argc, char* argv[])
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -79,18 +100,6 @@ int main(int argc, char* argv[])
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    const GLchar* vertexShaderSrc =
-        "attribute vec3 a_Position;" \
-        "attribute vec4 a_Color;   " \
-        "                          "  
-        "varying vec4 v_Color;     " \
-        "							  " \
-        "void main()                " \
-        "{						  " \
-        " gl_Position = vec4(a_Position, 1.0);" \
-        " v_Color = a_Color;           "\
-        "}                          ";
-
     GLuint vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShaderID, 1, &vertexShaderSrc, NULL);
     glCompileShader(vertexShaderID);
@@ -100,13 +109,6 @@ int main(int argc, char* argv[])
     {
         throw std::exception();
     }
-
-    const GLchar* fragmentShaderSrc =
-        "varying vec4 v_Color;    "\
-        "void main()              "\
-        "{                        "\
-        " gl_FragColor = v_Color;"\
-        "}";
 
     GLuint fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShaderID, 1, &fragmentShaderSrc, NULL);
