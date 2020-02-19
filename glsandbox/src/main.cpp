@@ -51,7 +51,11 @@ int main(int argc, char* argv[])
     {
         0.0f, 0.5f, 0.0f,
         -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f
+        0.5f, -0.5f, 0.0f,
+
+        1.0f, 0.5f, 0.0f,
+        0.0f, -0.5f, 0.0f,
+        1.5f, -0.5f, 0.0f
     };
 
     const GLfloat colors[] = 
@@ -82,7 +86,7 @@ int main(int argc, char* argv[])
 
     glBindBuffer(GL_ARRAY_BUFFER, colorsVboID);
     glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, colorsVboID);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     GLuint vaoId = 0;
     glGenVertexArrays(1, &vaoId);
@@ -91,9 +95,12 @@ int main(int argc, char* argv[])
         throw std::exception();
     }
     glBindVertexArray(vaoId);
+
     glBindBuffer(GL_ARRAY_BUFFER, positionsVboID);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
     glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, colorsVboID);
     glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)0);
     glEnableVertexAttribArray(1);
 
