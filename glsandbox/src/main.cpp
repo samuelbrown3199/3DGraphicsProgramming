@@ -2,6 +2,8 @@
 
 #include <exception>
 #include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
 
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
@@ -12,9 +14,12 @@ const GLchar* vertexShaderSrc =
 "                          "
 "varying vec4 v_Color;     " \
 "							  " \
+"uniform mat4 u_Projection;		"\
+"uniform mat4 u_Model;			"\
+"								"\
 "void main()                " \
 "{						  " \
-" gl_Position = vec4(a_Position, 1.0);" \
+" gl_Position = u_Projection * u_Model * vec4(a_Position, 1.0);" \
 " v_Color = a_Color;           "\
 "}                          ";
 
@@ -145,10 +150,11 @@ int main(int argc, char* argv[])
     glDetachShader(programID, fragmentShaderID);
     glDeleteShader(fragmentShaderID);
 
-    bool quit = false;
+	GLint modelLoc = glGetUniformLocation(programID, "u_Model");
+	GLint projectionLoc = glGetUniformLocation(programID, "u_Projection");
 
-    float r = 0, g = 0, b = 0;
-    bool r1 = false, g1 = false, b1 = false;
+    bool quit = false;
+	float angle = 0;
 
     while (!quit)
     {
@@ -162,13 +168,38 @@ int main(int argc, char* argv[])
             }
         }
 
+		int width = 0;
+		int height = 0;
+		SDL_GetWindowSize(window, &width, &height);
+		glViewport(0, 0, width, height);
+
+		glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)WINDOW_HEIGHT / (float)WINDOW_WIDTH, 0.1f, 100.0f);
+		glm::mat4 model(1.0f);
+		model = glm::translate(model, glm::vec3(0, 0, -2.5f));
+		model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
+
+		angle += 1.0f;
+
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(programID);
 
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
         glBindVertexArray(vaoId);
         glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		projection = glm::ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT, 0.0f, 1.0f);
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(100, WINDOW_HEIGHT - 100, 0));
+		model = glm::scale(model, glm::vec3(100, 100, 1));
+
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glBindVertexArray(0);
         glUseProgram(0);
