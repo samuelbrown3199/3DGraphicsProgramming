@@ -61,13 +61,13 @@ int main(int argc, char* argv[])
 
     const GLfloat positions[] =
     {
-        0.0f, 0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
+        1.0f, 1.0f, 0.0f,
 
-        1.0f, 0.5f, 0.0f,
-        0.0f, -0.5f, 0.0f,
-        1.5f, -0.5f, 0.0f
+        0.0f, 0.0f, 0.0f,
+        1.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
     };
     /*const GLfloat colors[] = 
     {
@@ -78,8 +78,12 @@ int main(int argc, char* argv[])
     const GLfloat textureCoords[] =
     {
         0.0f, 0.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f, 0.0f,
-        1.0f, 1.0f, 0.0f, 0.0f
+        1.0f, 0.0f, 0.0f, 0.0f,
+        1.0f, 1.0f, 0.0f, 0.0f,
+
+        0.0f, 0.0f, 0.0f, 0.0f,
+        1.0f, 1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 0.0f
     };
 
     //load the texture
@@ -243,7 +247,7 @@ int main(int argc, char* argv[])
 		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
         glBindTexture(GL_TEXTURE_2D, textureID);
         glBindVertexArray(vaoId);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, (sizeof(positions) / sizeof(positions[0])) / 3);
 
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0, 0, -7.5f));
